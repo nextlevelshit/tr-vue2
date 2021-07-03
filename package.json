@@ -1,5 +1,6 @@
 {
   "name": "tr-stocks-vue2",
+  "author": "Michael Czechowski <mail@dailysh.it>",
   "version": "0.1.0",
   "private": true,
   "scripts": {

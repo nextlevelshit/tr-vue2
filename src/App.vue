@@ -1,18 +1,53 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
-  </div>
+  <main id="app">
+    <button @click="openProductSearch">Add Product</button>
+    <ProductSearch
+      v-show="isSearchOpen"
+      @closeSearch="closeProductSearch"
+      @selectProduct="subscribeTo"
+    />
+    <Watchlist :products="subscribedProducts" :isStale="false" />
+  </main>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import Watchlist from "@/components/Watchlist.vue";
+import ProductSearch from "@/components/ProductSearch.vue";
+import { Product } from "@/models/Product.model";
 
 export default Vue.extend({
   name: "App",
   components: {
-    HelloWorld,
+    Watchlist,
+    ProductSearch,
+  },
+  data() {
+    return {
+      isSearchOpen: false,
+      subscribedProducts: [
+        {
+          isin: "XYZ01234",
+          displayName: "XYZ",
+        },
+      ],
+    };
+  },
+  methods: {
+    subscribeTo(product: Product): void {
+      this.subscribedProducts.push(product);
+    },
+    openProductSearch(): void {
+      this.isSearchOpen = true;
+    },
+    closeProductSearch(): void {
+      this.isSearchOpen = false;
+    },
+  },
+  computed: {
+    uniqueProductIds(): Set<string> {
+      return new Set(this.subscribedProducts.map(({ isin }) => isin));
+    },
   },
 });
 </script>
